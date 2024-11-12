@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Pemesanan Bus</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/qrious@4.0.2/dist/qrious.min.js"></script>
+</head>
+<body>
+    <div class="container" id="formContainer">
+        <h2>Form Pemesanan Bus</h2>
+        <form id="bookingForm" onsubmit="submitForm(event)">
+            <label for="name">Nama Penumpang:</label>
+            <input type="text" id="name" name="name" required>
+
+            <label for="departureDate">Tanggal Berangkat:</label>
+            <input type="date" id="departureDate" name="departureDate" required>
+
+            <label for="phone">Nomor HP:</label>
+            <input type="text" id="phone" name="phone" required>
+
+            <label for="departurePoint">Titik Keberangkatan:</label>
+            <input type="text" id="departurePoint" name="departurePoint" required>
+
+            <label for="dropPoint">Titik Turun:</label>
+            <input type="text" id="dropPoint" name="dropPoint" required>
+
+            <label for="busClass">Kelas Bus:</label>
+            <select id="busClass" name="busClass" required>
+                <option value="">Pilih Kelas</option>
+                <option value="Ekonomi">Ekonomi</option>
+                <option value="Bisnis">Bisnis</option>
+                <option value="Eksekutif">Eksekutif</option>
+            </select>
+
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+
+    <!-- Halaman kedua untuk QR Code -->
+    <div class="container" id="qrPage" style="display: none;">
+        <h2>Kode QR Pemesanan Anda</h2>
+        <canvas id="qrCode"></canvas>
+        <p>Scan QR code ini untuk melihat detail pemesanan dalam bentuk karcis tiket.</p>
+        <button onclick="goBack()">Kembali ke Form</button>
+    </div>
+
+    <script>
+        function submitForm(event) {
+            event.preventDefault();
+
+            // Ambil data dari form
+            const name = document.getElementById("name").value;
+            const departureDate = document.getElementById("departureDate").value;
+            const phone = document.getElementById("phone").value;
+            const departurePoint = document.getElementById("departurePoint").value;
+            const dropPoint = document.getElementById("dropPoint").value;
+            const busClass = document.getElementById("busClass").value;
+
+            // Gabungkan data pemesanan ke dalam format JSON
+            const bookingData = {
+                name,
+                departureDate,
+                phone,
+                departurePoint,
+                dropPoint,
+                busClass
+            };
+
+            // Encode data sebagai URL agar mudah diakses di halaman tiket
+            const encodedData = encodeURIComponent(JSON.stringify(bookingData));
+            const qrURL = `${window.location.origin}/ticket.html?data=${encodedData}`;
+
+            // Buat kode QR dari URL yang mengarah ke halaman tiket
+            const qr = new QRious({
+                element: document.getElementById("qrCode"),
+                value: qrURL,
+                size: 200,
+                background: '#ffffff',
+                foreground: '#000000'
+            });
+
+            // Sembunyikan form dan tampilkan halaman QR code
+            document.getElementById("formContainer").style.display = "none";
+            document.getElementById("qrPage").style.display = "block";
+        }
+
+        // Fungsi untuk kembali ke form
+        function goBack() {
+            document.getElementById("qrPage").style.display = "none";
+            document.getElementById("formContainer").style.display = "block";
+        }
+    </script>
+</body>
+</html>

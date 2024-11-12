@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Karcis Tiket Pemesanan</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container" id="ticketContainer">
+        <h2>Karcis Tiket Pemesanan</h2>
+        <div id="ticket">
+            <p><strong>Nama Penumpang:</strong> <span id="name"></span></p>
+            <p><strong>Tanggal Berangkat:</strong> <span id="departureDate"></span></p>
+            <p><strong>Nomor HP:</strong> <span id="phone"></span></p>
+            <p><strong>Titik Keberangkatan:</strong> <span id="departurePoint"></span></p>
+            <p><strong>Titik Turun:</strong> <span id="dropPoint"></span></p>
+            <p><strong>Kelas Bus:</strong> <span id="busClass"></span></p>
+        </div>
+    </div>
+
+    <script>
+        // Ambil parameter data dari URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const data = urlParams.get('data');
+
+        if (data) {
+            // Decode data dan parse JSON
+            const bookingData = JSON.parse(decodeURIComponent(data));
+
+            // Isi data ke dalam tampilan karcis
+            document.getElementById("name").textContent = bookingData.name;
+            document.getElementById("departureDate").textContent = bookingData.departureDate;
+            document.getElementById("phone").textContent = bookingData.phone;
+            document.getElementById("departurePoint").textContent = bookingData.departurePoint;
+            document.getElementById("dropPoint").textContent = bookingData.dropPoint;
+            document.getElementById("busClass").textContent = bookingData.busClass;
+        } else {
+            document.getElementById("ticketContainer").innerHTML = "<p>Data tidak ditemukan.</p>";
+        }
+    </script>
+</body>
+</html>
